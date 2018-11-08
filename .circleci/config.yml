@@ -54,7 +54,6 @@ jobs:
             export PATH="$HOME/miniconda/bin:$PATH"            
             source activate test            
             pip install . --user
-            pip install codecov --user
             python setup.py test
 
       - run:
@@ -62,7 +61,8 @@ jobs:
           command: |
             export PATH="$HOME/miniconda/bin:$PATH"
             export CODECOV_TOKEN="b12be258-0a95-4053-8c43-d1a8258be114"
-            source activate test            
+            source activate test
+            pip install codecov --user
             codecov
             
       - store_artifacts:
