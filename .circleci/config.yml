@@ -54,7 +54,7 @@ jobs:
             export PATH="$HOME/miniconda/bin:$PATH"            
             source activate test            
             pip install . --user
-            pip install coverage --user
+            pip install codecov --user
             python setup.py test
 
       - run:
