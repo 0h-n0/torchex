@@ -1,0 +1,5 @@
+[run]
+source = torchex
+include = */torchex/*
+omit =
+    */setup.py
