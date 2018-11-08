@@ -63,7 +63,7 @@ jobs:
             export CODECOV_TOKEN="b12be258-0a95-4053-8c43-d1a8258be114"
             source activate test
             conda install -c conda-forge codecov            
-            codecov
+            codecov -t b12be258-0a95-4053-8c43-d1a8258be114
             
       - store_artifacts:
           path: test-reports
