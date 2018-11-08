@@ -57,6 +57,14 @@ jobs:
             pip install coverage --user
             python setup.py test
 
+      - run:
+          name: run coverage
+          command: |
+            export PATH="$HOME/miniconda/bin:$PATH"
+            export CODECOV_TOKEN="b12be258-0a95-4053-8c43-d1a8258be114"
+            source activate test            
+            codecov
+            
       - store_artifacts:
           path: test-reports
           destination: test-reports
