@@ -106,6 +106,9 @@ $ make html
 
 ## Codes References 
 
+* Chainer
+  * One of the most wonderfull DeepLearning framework.
+  * https://github.com/chainer/chainer
 * NLP
   * allenNLP
     * https://github.com/allenai/allennlp
