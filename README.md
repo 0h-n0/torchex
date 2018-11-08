@@ -1,4 +1,5 @@
 [![CircleCI](https://circleci.com/gh/0h-n0/torchex.svg?style=svg&circle-token=99e93ba7bf6433d0cd33adbec2fbd042d141353d)](https://circleci.com/gh/0h-n0/torchex)
+[![codecov](https://codecov.io/gh/0h-n0/torchex/branch/master/graph/badge.svg)](https://codecov.io/gh/0h-n0/torchex)
 
 # (WIP) Pytorch Extension library
 
