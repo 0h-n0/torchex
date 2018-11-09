@@ -27,7 +27,6 @@ install:
   - python setup.py install
 
 script:
-  - python setup.py test
-  - codeclimate-test-reporter --token f73b27a29cb0c7bd5da5ce476412743bfc6d31a094f1806434332c2e5c92381f
+  - python setup.py test #codeclimate-test-reporter --token f73b27a29cb0c7bd5da5ce476412743bfc6d31a094f1806434332c2e5c92381f
   - codecov
             

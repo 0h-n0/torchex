@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/0h-n0/torchex.svg?branch=master)](https://travis-ci.org/0h-n0/torchex)
 [![codecov](https://codecov.io/gh/0h-n0/torchex/branch/master/graph/badge.svg)](https://codecov.io/gh/0h-n0/torchex)
 [![Maintainability](https://api.codeclimate.com/v1/badges/7cd6c99f10d22db13ee8/maintainability)](https://codeclimate.com/github/0h-n0/torchex/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/7cd6c99f10d22db13ee8/test_coverage)](https://codeclimate.com/github/0h-n0/torchex/test_coverage)
 [![BCH compliance](https://bettercodehub.com/edge/badge/0h-n0/torchex?branch=master)](https://bettercodehub.com/)
 
 # (WIP) Pytorch Extension library
