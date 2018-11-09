@@ -21,10 +21,11 @@ install:
   - conda install pytorch-cpu torchvision-cpu -c pytorch
   - conda install pytest
   - conda install pytest-cov
-  - conda install -c conda-forge tinydb codecov
-  - pip install coveralls pytz
+  - conda install -c conda-forge codecov
+  - pip install pytz
   - python setup.py install
 
 script:
   - pytest --cov=torchex test/
-
+  - codecov
+            
