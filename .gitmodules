@@ -1,0 +1,3 @@
+[submodule "examples/image"]
+	path = examples/image
+	url = git@github.com:0h-n0/image.git
