@@ -1,8 +1,8 @@
 language: python
 
 git:
-  depth: 1
-
+  submodules: false
+  
 os:
   - linux
 
