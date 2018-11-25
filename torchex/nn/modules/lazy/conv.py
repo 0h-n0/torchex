@@ -1,5 +1,8 @@
+import math
+
 import torch
 import torch.nn as nn
+from torch.nn import init
 import torch.nn.functional as F
 
 from .utils import _single, _pair, _triple
@@ -23,6 +26,14 @@ class _ConvNd(nn.Module):
         self.weight = None
         self.in_channels = None
         self.bias = bias
+
+    def reset_parameters(self):
+        n = self.in_channels
+        init.kaiming_uniform_(self.weight, a=math.sqrt(5))
+        if self.bias is not None:
+            fan_in, _ = init._calculate_fan_in_and_fan_out(self.weight)
+            bound = 1 / math.sqrt(fan_in)
+            init.uniform_(self.bias, -bound, bound)        
         
     def extra_repr(self):
         s = ('{in_channels}, {out_channels}, kernel_size={kernel_size}'
@@ -68,6 +79,7 @@ class Conv1d(_ConvNd):
                 self.bias = nn.Parameter(torch.Tensor(self.out_channels))
             else:
                 self.register_parameter('bias', None)
+            self.reset_parameters()
 
         return F.conv1d(x, self.weight, self.bias, self.stride,
                       self.padding, self.dilation, self.groups)
@@ -102,7 +114,8 @@ class Conv2d(_ConvNd):
                 self.bias = nn.Parameter(torch.Tensor(self.out_channels))
             else:
                 self.register_parameter('bias', None)
-
+            self.reset_parameters()
+            
         return F.conv2d(x, self.weight, self.bias, self.stride,
                       self.padding, self.dilation, self.groups)
 
@@ -135,6 +148,7 @@ class Conv3d(_ConvNd):
                 self.bias = nn.Parameter(torch.Tensor(self.out_channels))
             else:
                 self.register_parameter('bias', None)
+            self.reset_parameters()                
 
         return F.conv3d(x, self.weight, self.bias, self.stride,
                       self.padding, self.dilation, self.groups)
