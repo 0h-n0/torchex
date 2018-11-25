@@ -1,3 +1,6 @@
+[![GitHub license](https://img.shields.io/github/license/0h-n0/torchex.svg)](https://github.com/0h-n0/torchex)
+[![PYTHON version](https://img.shields.io/badge/python-3.5,3.6-blue.svg)](https://github.com/0h-n0/torchex)
+[![PyPI version](https://img.shields.io/pypi/v/torchex.svg)](https://badge.fury.io/py/torchex)
 [![CircleCI](https://circleci.com/gh/0h-n0/torchex.svg?style=svg&circle-token=99e93ba7bf6433d0cd33adbec2fbd042d141353d)](https://circleci.com/gh/0h-n0/torchex)
 [![Build Status](https://travis-ci.org/0h-n0/torchex.svg?branch=master)](https://travis-ci.org/0h-n0/torchex)
 [![codecov](https://codecov.io/gh/0h-n0/torchex/branch/master/graph/badge.svg)](https://codecov.io/gh/0h-n0/torchex)
