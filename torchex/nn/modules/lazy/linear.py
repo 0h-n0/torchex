@@ -1,3 +1,5 @@
+import torch
+import torch.nn as nn
 
 class Linear(nn.Module):
     def __init__(self, out_features, use_bias=True):
