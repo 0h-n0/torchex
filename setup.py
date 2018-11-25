@@ -35,6 +35,7 @@ setuptools.setup(
     author="Koji Ono",
     author_email="koji.ono@exwzd.com",
     description="Pytorch Extension Module.",
+    url='https://github.com/0h-n0/torchex',
     long_description=(p.parent / 'README.md').open(encoding='utf-8').read(),
     packages=setuptools.find_packages(),
     install_requires=install_requires,

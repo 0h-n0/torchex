@@ -4,6 +4,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/7cd6c99f10d22db13ee8/maintainability)](https://codeclimate.com/github/0h-n0/torchex/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/7cd6c99f10d22db13ee8/test_coverage)](https://codeclimate.com/github/0h-n0/torchex/test_coverage)
 [![BCH compliance](https://bettercodehub.com/edge/badge/0h-n0/torchex?branch=master)](https://bettercodehub.com/)
+[![Downloads](https://img.shields.io/pypi/dm/torchex.svg)](https://github.com/0h-n0/torchex)
 
 # (WIP) Pytorch Extension library
 
