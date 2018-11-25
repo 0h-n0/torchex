@@ -41,3 +41,5 @@ from .graph.linear import GraphLinear
 from .graph.conv import GraphConv
 from .graph.conv import SparseMM
 from .graph.batchnorm import GraphBatchNorm
+
+from .lazy import *
