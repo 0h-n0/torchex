@@ -41,6 +41,11 @@ setuptools.setup(
     install_requires=install_requires,
     setup_requires=setup_requires,
     tests_require=test_require,
+    extras_require={
+        'docs': [
+            'torch'
+            'sphinx >= 1.4',
+            'sphinx_rtd_theme']},
     classifiers=[
         'Programming Language :: Python :: 3.6',
     ],
