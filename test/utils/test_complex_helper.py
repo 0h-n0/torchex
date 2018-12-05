@@ -6,7 +6,7 @@ from torchex.utils import (to_complex,
                            complex_norm)
 
 def test_to_complex_1d():
-    x = torch.arange(1, 10).view(1, 1, 10)
+    x = torch.arange(1, 11).view(1, 1, 10)
     y = to_complex(x)
     assert list(y.shape) == [1, 1, 10, 2]
     assert y[:, :, :, 0].shape == x.shape
@@ -16,7 +16,7 @@ def test_to_complex_1d():
         assert int(y[0, 0, i-1, 1]) == 0        
 
 def test_to_complex_2d():
-    x = torch.arange(1, 25).view(1, 1, 5, 5)
+    x = torch.arange(1, 26).view(1, 1, 5, 5)
     y = to_complex(x)
     assert list(y.shape) == [1, 1, 5, 5, 2]
     assert y[:, :, :, :, 0].shape == x.shape
@@ -29,7 +29,7 @@ def test_to_complex_2d():
             idx += 1
 
 def test_to_complex_3d():
-    x = torch.arange(1, 125).view(1, 1, 5, 5, 5)
+    x = torch.arange(1, 126).view(1, 1, 5, 5, 5)
     y = to_complex(x)
     assert list(y.shape) == [1, 1, 5, 5, 5, 2]
     assert y[:, :, :, :, :, 0].shape == x.shape
@@ -44,7 +44,7 @@ def test_to_complex_3d():
     
 
 def test_to_real():
-    x = torch.arange(1, 20).view(1, 1, 10, 2)
+    x = torch.arange(1, 21).view(1, 1, 10, 2)
     y = to_real(x)
     assert list(y.shape) == [1, 1, 10]
     for idx, ele in enumerate(range(1, 20, 2)):
@@ -52,7 +52,7 @@ def test_to_real():
 
         
 def test_complex_norm():
-    x = torch.arange(1, 20).view(1, 1, 10, 2)
+    x = torch.arange(1, 21).view(1, 1, 10, 2)
     y = complex_norm(x)    
     assert list(y.shape) == [1, 1, 10]    
     out = [  2.2361,   5.0000,   7.8102,  10.6301,  13.4536,  16.2788,
