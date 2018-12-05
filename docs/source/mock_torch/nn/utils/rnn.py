@@ -1,0 +1,2 @@
+class PackedSequence:
+    pass

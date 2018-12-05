@@ -31,18 +31,12 @@ release = '1.0.1'
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../'))
+from collections import namedtuple
 
-try:
-    import mock
-except:
-    import unittest.mock as mock
-    
-MOCK_MODULES = ['numpy', 'scipy', 'torch', 'torch.nn', 'torch.nn.functional',
-                 'torch.nn.parameter', 'torch.nn.utils', 'torch.nn.utils.rnn', 'torch.autograd']
-MOCK_MODULES = ['numpy', 'scipy']
+sys.path.insert(0, os.path.abspath('.'))
+import mock_torch as torch
 
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = mock.Mock()
+sys.modules['torch'] = torch
 
 import torchex
 
