@@ -25,7 +25,7 @@ $ pip install -e .
 
 ## Requirements
 
-* Pytorch >= 0.4.0
+* Pytorch >= 0.4.1
 
 ## Documentation
 

@@ -6,9 +6,9 @@ from torch.nn import init
 import torch.nn.functional as F
 
 from .utils import _single, _pair, _triple
+from .base import LazyBase
 
-
-class _ConvNd(nn.Module):
+class _ConvNd(LazyBase):
     def __init__(self, out_channels, kernel_size, stride,
                  padding, dilation, transposed, output_padding, groups, bias):
         super(_ConvNd, self).__init__()
@@ -23,11 +23,9 @@ class _ConvNd(nn.Module):
         self.output_padding = output_padding
         self.groups = groups
         
-        self.weight = None
         self.in_channels = None
+        self.weight = None
         self.bias = bias
-        self.to_args = None
-        self.to_kwargs = None
 
     def _initialize_weight(self, in_channels):
         self.in_channels = in_channels
@@ -54,11 +52,6 @@ class _ConvNd(nn.Module):
             self.bias = nn.Parameter(self.bias)                
         self._reset_parameters()
 
-    def to(self, *args, **kwargs):
-        self.to_args = args
-        self.to_kwargs = kwargs
-        return super().to(*args, **kwargs)
-        
     def _reset_parameters(self):
         n = self.in_channels
         init.kaiming_uniform_(self.weight, a=math.sqrt(5))
