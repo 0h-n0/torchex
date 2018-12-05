@@ -31,7 +31,14 @@ release = '1.0.1'
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../'))
-import torchex                
+import mock
+ 
+MOCK_MODULES = ['numpy', 'scipy', 'torch']
+for mod_name in MOCK_MODULES:
+sys.modules[mod_name] = mock.Mock()
+
+import torchex
+
 
 # -- General configuration ---------------------------------------------------
 
