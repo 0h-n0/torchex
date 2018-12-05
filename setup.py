@@ -43,7 +43,7 @@ setuptools.setup(
     tests_require=test_require,
     extras_require={
         'docs': [
-            'pytorch',
+            'torch',
             'sphinx >= 1.4',
             'sphinx_rtd_theme']},
     classifiers=[
