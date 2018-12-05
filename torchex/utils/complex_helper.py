@@ -16,5 +16,6 @@ def to_real(x: torch.Tensor) -> torch.Tensor:
     return x[..., 0]
 
 def complex_norm(x: torch.Tensor) -> torch.Tensor:
+    x = x.type(torch.float)
     assert 2 == x.size(-1)
     return torch.sqrt(torch.pow(x[..., 0], 2) + torch.pow(x[..., 1], 2)).type(x.dtype)
