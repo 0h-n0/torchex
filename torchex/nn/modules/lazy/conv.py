@@ -26,19 +26,46 @@ class _ConvNd(nn.Module):
         self.weight = None
         self.in_channels = None
         self.bias = bias
+        self.to_args = None
+        self.to_kwargs = None
 
-    def reset_parameters(self):
+    def _initialize_weight(self, in_channels):
+        self.in_channels = in_channels
+        if self.in_channels % self.groups != 0:
+            raise ValueError('in_channels must be divisible by groups')
+
+        if self.transposed:
+            self.weight = torch.Tensor(self.in_channels, self.out_channels // self.groups, *self.kernel_size)
+        else:
+            self.weight = torch.Tensor(self.out_channels, self.in_channels // self.groups, *self.kernel_size)
+                
+        if self.bias:
+            self.bias = torch.Tensor(self.out_channels)
+
+        if self.to_args is not None:
+            self.weight = self.weight.to(*self.to_args, **self.to_kwargs)
+            if self.bias is not None:
+                self.bias = self.bias.to(*self.to_args, **self.to_kwargs)
+
+        self.weight = nn.Parameter(self.weight)                    
+        if self.bias is None:
+            self.register_parameter('bias', None)
+        else:
+            self.bias = nn.Parameter(self.bias)                
+        self._reset_parameters()
+
+    def to(self, *args, **kwargs):
+        self.to_args = args
+        self.to_kwargs = kwargs
+        return super().to(*args, **kwargs)
+        
+    def _reset_parameters(self):
         n = self.in_channels
         init.kaiming_uniform_(self.weight, a=math.sqrt(5))
         if self.bias is not None:
             fan_in, _ = init._calculate_fan_in_and_fan_out(self.weight)
             bound = 1 / math.sqrt(fan_in)
             init.uniform_(self.bias, -bound, bound)        
-
-    def _to_host(self, x):
-        self.weight = self.weight.type(x.dtype)
-        if self.bias is not None:
-            self.bias = self.bias.type(x.dtype)            
             
     def extra_repr(self):
         s = ('{in_channels}, {out_channels}, kernel_size={kernel_size}'
@@ -71,22 +98,8 @@ class Conv1d(_ConvNd):
         in_channels = x.size(1)
 
         if self.weight is None:
-            self.in_channels = in_channels
-            if self.in_channels % self.groups != 0:
-                raise ValueError('in_channels must be divisible by groups')
-            if self.transposed:
-                self.weight = nn.Parameter(torch.Tensor(
-                    self.in_channels, self.out_channels // self.groups, *self.kernel_size))
-            else:
-                self.weight = nn.Parameter(torch.Tensor(
-                    self.out_channels, self.in_channels // self.groups, *self.kernel_size))
-            if self.bias:
-                self.bias = nn.Parameter(torch.Tensor(self.out_channels))
-            else:
-                self.register_parameter('bias', None)
-            self.reset_parameters()
-            self._to_host(x)
-
+            self._initialize_weight(in_channels)
+            
         return F.conv1d(x, self.weight, self.bias, self.stride,
                       self.padding, self.dilation, self.groups)
 
@@ -106,22 +119,8 @@ class Conv2d(_ConvNd):
         in_channels = x.size(1)
 
         if self.weight is None:
-            self.in_channels = in_channels
-            if self.in_channels % self.groups != 0:
-                raise ValueError('in_channels must be divisible by groups')
-            if self.transposed:
-                self.weight = nn.Parameter(torch.Tensor(
-                    self.in_channels, self.out_channels // self.groups, *self.kernel_size))
-            else:
-                self.weight = nn.Parameter(torch.Tensor(
-                    self.out_channels, self.in_channels // self.groups, *self.kernel_size))
-            if self.bias:
-                self.bias = nn.Parameter(torch.Tensor(self.out_channels))
-            else:
-                self.register_parameter('bias', None)
-            self.reset_parameters()
-            self._to_host(x)
-            
+            self._initialize_weight(in_channels)            
+
         return F.conv2d(x, self.weight, self.bias, self.stride,
                       self.padding, self.dilation, self.groups)
 
@@ -141,21 +140,7 @@ class Conv3d(_ConvNd):
         in_channels = x.size(1)
 
         if self.weight is None:
-            self.in_channels = in_channels
-            if self.in_channels % self.groups != 0:
-                raise ValueError('in_channels must be divisible by groups')
-            if self.transposed:
-                self.weight = nn.Parameter(torch.Tensor(
-                    self.in_channels, self.out_channels // self.groups, *self.kernel_size))
-            else:
-                self.weight = nn.Parameter(torch.Tensor(
-                    self.out_channels, self.in_channels // self.groups, *self.kernel_size))
-            if self.bias:
-                self.bias = nn.Parameter(torch.Tensor(self.out_channels))
-            else:
-                self.register_parameter('bias', None)
-            self.reset_parameters()
-            self._to_host(x)
+            self._initialize_weight(in_channels)                        
 
         return F.conv3d(x, self.weight, self.bias, self.stride,
                       self.padding, self.dilation, self.groups)
