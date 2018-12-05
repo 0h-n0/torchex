@@ -1,5 +1,5 @@
+import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 
 class Highway(nn.Module):
@@ -44,6 +44,6 @@ class Highway(nn.Module):
             the same minibatch size as the input array.
         """
         out_plain = self.activate(self.plain(x))
-        out_transform = F.sigmoid(self.transform(x))
+        out_transform = torch.sigmoid(self.transform(x))
         y = out_plain * out_transform + x * (1 - out_transform)
         return y
