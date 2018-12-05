@@ -11,10 +11,30 @@ Initialization
 
 .. autofunction:: rnn_init                                    
 
-Pooling
-**************
+
+Utility
+********
 
 .. automodule:: torchex.nn
+               
+.. autoclass:: PeriodicPad2d
+      
+.. autoclass:: PeriodicPad3d
+
+.. autoclass:: Flatten               
+
+
+
+Convlution
+************
+
+.. autoclass:: MLPConv2d
+
+.. autoclass:: UpsampleConvLayer
+
+
+Pooling
+**************
 
 .. autoclass:: GlobalAvgPool1d
                
@@ -25,13 +45,38 @@ Pooling
 .. autoclass:: GlobalMaxPool2d                              
 
 .. autoclass:: MaxAvgPool2d
+               
+Cropping
+********
 
-.. autoclass:: PeriodicPad2d
+.. autoclass:: Crop2d
 
-.. autoclass:: PeriodicPad3d
+.. autoclass:: Crop3d
 
-.. autoclass:: Flatten               
+Local Convolution
+******************
 
+.. autoclass:: Conv2dLocal               
+
+
+Highway
+**********
+
+.. autoclass:: Highway
+
+
+
+Inception
+**********
+
+.. autoclass:: Inception
+
+.. autoclass:: InceptionBN
+
+               
+Graph
+*******
+   
 .. autoclass:: GraphLinear               
 
 .. autoclass:: GraphConv               
@@ -42,7 +87,30 @@ Pooling
 
 .. autoclass:: SequenceLinear
 
-.. autoclass:: LSTM   
 
-.. autoclass:: IndRNN                             
+indrnn
+*******
+
+.. autoclass:: IndRNN
+
+.. autoclass:: IndRNNCell
+
+.. autoclass:: IndRNNTanhCell
+
+.. autoclass:: IndRNNReLuCell
+
+
+Lazy Modules
+************
+
+.. autoclass:: Linear
+
+.. autoclass:: Conv1d
+
+.. autoclass:: Conv2d                              
+
+.. autoclass:: Conv3d
+
+.. autoclass:: LazyRNNBase                                             
+
 
