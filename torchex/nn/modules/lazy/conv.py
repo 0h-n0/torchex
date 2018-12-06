@@ -77,6 +77,19 @@ class _ConvNd(LazyBase):
 
 
 class Conv1d(_ConvNd):
+    '''
+    Examples::
+
+        import torch
+        import torchex.nn as exnn
+     
+        net = exnn.Conv1d(10, 2)
+        # You don't need to give the size of input for this module.
+        # This network is equivalent to `nn.Conv1d(3, 10, 2)`.
+     
+        x = troch.randn(10, 3, 28)
+        y = net(x)
+    '''
     def __init__(self, out_channels, kernel_size, stride=1,
                  padding=0, dilation=1, groups=1, bias=True):
         kernel_size = _single(kernel_size)
@@ -98,6 +111,19 @@ class Conv1d(_ConvNd):
 
     
 class Conv2d(_ConvNd):
+    '''
+    Examples::
+
+        import torch
+        import torchex.nn as exnn
+     
+        net = exnn.Conv2d(10, 2)
+        # You don't need to give the size of input for this module.
+        # This network is equivalent to `nn.Conv2d(3, 10, 2)`.
+     
+        x = troch.randn(10, 3, 28, 28)
+        y = net(x)
+    '''
     def __init__(self, out_channels, kernel_size, stride=1,
                  padding=0, dilation=1, groups=1, bias=True):
         kernel_size = _pair(kernel_size)
@@ -119,6 +145,19 @@ class Conv2d(_ConvNd):
 
 
 class Conv3d(_ConvNd):
+    '''
+    Examples::
+
+        import torch
+        import torchex.nn as exnn
+     
+        net = exnn.Conv3d(10, 2)
+        # You don't need to give the size of input for this module.
+        # This network is equivalent to `nn.Conv3d(3, 10, 2)`.
+     
+        x = troch.randn(10, 3, 100, 28, 28)
+        y = net(x)
+    '''
     def __init__(self, out_channels, kernel_size, stride=1,
                  padding=0, dilation=1, groups=1, bias=True):
         kernel_size = _triple(kernel_size)

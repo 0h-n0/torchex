@@ -103,6 +103,9 @@ indrnn
 Lazy Modules
 ************
 
+These modules provide lazy evaluation for pytorch modules and help to create your neural network more easily and intuitively. You don't need pass input size to These modules. This Lazy evaluation comes from **chainer** which is one of the most powerful Deep-Learning framework. 
+
+
 .. autoclass:: Linear
 
 .. autoclass:: Conv1d

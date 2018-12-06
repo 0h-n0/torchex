@@ -43,7 +43,6 @@ net = exnn.Linear(10)
 x = troch.randn(10, 100)
 
 y = net(x)
-
 ```
 
 
