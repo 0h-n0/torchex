@@ -10,18 +10,15 @@
 [![BCH compliance](https://bettercodehub.com/edge/badge/0h-n0/torchex?branch=master)](https://bettercodehub.com/)
 [![Downloads](https://img.shields.io/pypi/dm/torchex.svg)](https://pypi.org/project/torchex/)
 
-# (WIP) Pytorch Extension library
+# (WIP) `torchexq library
 
-Pytorch Extenstion library provides advanced Neural Network Layers. You can easily use them like using original pytorch.
+`torchex` library provides advanced Neural Network Layers. You can easily use them like using original pytorch.
 
 ## Installation
 
 ```
-$ git clone --recursive 
-$ cd torchex
-$ pip install -e .
+$ pip install torchex
 ```
-
 
 ## Requirements
 
@@ -29,13 +26,23 @@ $ pip install -e .
 
 ## Documentation
 
-After executing the following codes, you can read `PytorchExtenstion` documentation in docs/build/html/index.html. 
+* https://torchex.readthedocs.io/en/latest/index.html
 
-```shell
-$ pip install -r requirements.txt
-$ cd docs
-$ make html
+## How to use
+
+```python
+import torch
+import torchex.nn as exnn
+
+net = exnn.Linear(10)
+# You don't need to give the size of input for this module.
+
+x = troch.randn(10, 100)
+
+y = net(x)
+
 ```
+
 
 ## TODO
 
