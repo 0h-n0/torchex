@@ -30,6 +30,8 @@ $ pip install torchex
 
 ## How to use
 
+### Lazy Modules
+
 ```python
 import torch
 import torchex.nn as exnn
