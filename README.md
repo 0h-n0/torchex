@@ -36,6 +36,7 @@ import torchex.nn as exnn
 
 net = exnn.Linear(10)
 # You don't need to give the size of input for this module.
+# This network is equivalent to `nn.Linear(100, 10)`.
 
 x = troch.randn(10, 100)
 
