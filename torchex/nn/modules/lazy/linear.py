@@ -4,6 +4,22 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class Linear(nn.Module):
+    '''
+
+
+    Examples::
+
+        import torch
+        import torchex.nn as exnn
+     
+        net = exnn.Linear(10)
+        # You don't need to give the size of input for this module.
+        # This network is equivalent to `nn.Linear(100, 10)`.
+     
+        x = troch.randn(10, 100)
+        y = net(x)
+
+    '''
     def __init__(self, out_features, use_bias=True):
         super(Linear, self).__init__()
         self.out_features = out_features

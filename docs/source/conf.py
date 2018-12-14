@@ -19,7 +19,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'PytorchExtention'
+project = 'torchex'
 copyright = '2018, koji.ono'
 author = 'koji.ono'
 
@@ -31,7 +31,14 @@ release = '1.0.1'
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../'))
-import torchex                
+from collections import namedtuple
+
+sys.path.insert(0, os.path.abspath('.'))
+import mock_torch as torch
+
+sys.modules['torch'] = torch
+
+import torchex
 
 # -- General configuration ---------------------------------------------------
 
@@ -114,7 +121,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'PytorchExtentiondoc'
+htmlhelp_basename = 'torchex'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -141,7 +148,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'PytorchExtention.tex', 'PytorchExtention Documentation',
+    (master_doc, 'torchex.tex', 'torchex Documentation',
      'koji.ono', 'manual'),
 ]
 
@@ -151,7 +158,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pytorchextention', 'PytorchExtention Documentation',
+    (master_doc, 'torchex', 'torchex Documentation',
      [author], 1)
 ]
 
@@ -162,8 +169,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'PytorchExtention', 'PytorchExtention Documentation',
-     author, 'PytorchExtention', 'One line description of project.',
+    (master_doc, 'torchex', 'torchex Documentation',
+     author, 'torchex', 'One line description of project.',
      'Miscellaneous'),
 ]
 

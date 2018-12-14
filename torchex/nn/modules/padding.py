@@ -7,11 +7,13 @@ class PeriodicPad2d(nn.Module):
     :params torch.Tensor input: Input(B, C, W, H)
 
     # https://github.com/ZichaoLong/aTEAM/blob/master/nn/functional/utils.py
-    """    
+    """
+    
     def __init__(self,
                  pad_left: int=0, pad_right: int=0,
                  pad_top: int=0, pad_bottom: int=0):
         super(PeriodicPad2d, self).__init__()
+        self.__doc__ = 'hello'
         self.pad_left = pad_left
         self.pad_right = pad_right
         self.pad_top = pad_top

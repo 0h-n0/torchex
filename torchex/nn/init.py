@@ -21,7 +21,6 @@ def chrono_init(rnn: torch.nn.Module, Tmax=None, Tmin=1):
                 # forget gate biases = log(uniform(1, Tmax-1))
                 p.data[0: hidden_size] = -p.data[hidden_size: 2*hidden_size]
                 # input gate biases = -(forget gate biases)
-
     return rnn
 
 
