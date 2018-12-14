@@ -19,3 +19,9 @@ _quadruple = _ntuple(4)
 class Flatten(nn.Module):
     def forward(self, input):
         return input.view(input.size(0), -1)
+
+class Throw(nn.Module):
+    ''' Nothint to do.
+    '''
+    def forward(self, input):
+       return input 

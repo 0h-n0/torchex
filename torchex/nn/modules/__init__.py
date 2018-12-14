@@ -25,9 +25,8 @@ from .padding import (PeriodicPad2d,
 
 from .highway import Highway
 
-from .inception import Inception
-
-from .inceptionbn import InceptionBN
+from .cnn_blocks import (Inception,
+                         InceptionBN)
 
 from .rnn.basic import (SequenceLinear,
                         LSTM)
