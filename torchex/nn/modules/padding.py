@@ -20,7 +20,7 @@ class PeriodicPad2d(nn.Module):
         self.pad_bottom = pad_bottom
 
     def forward(self, input):
-        assert input.dim() == 4, 'only support Input(B, C, W, H) or Input(B, C, H, W)'
+        assert input.dim() == 4, 'only supports Input(B, C, H, W)'
         
         B, C, H, W = input.size()
         
