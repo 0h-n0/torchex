@@ -78,6 +78,17 @@ class _ConvNd(LazyBase):
 
 class Conv1d(_ConvNd):
     '''
+    :param out_channels: the size of the window to take a max and average over
+    :param kernel_size: the size of the window to take a max and average over
+    :param stride: the size of stride to move kernel
+    :param padding: implicit zero padding to be added on both sides
+    :param dilation: a parameter that controls the stride of elements in the window
+    :param return_indices: if True, will return the max indices along with the outputs. Useful when Unpooling later
+    :param ceil_mode: when True, will use ceil instead of floor to compute the output shape    
+
+    :type kernel_size: int or list
+    :type stride: int or list
+    
     Examples::
 
         import torch
@@ -90,8 +101,8 @@ class Conv1d(_ConvNd):
         x = troch.randn(10, 3, 28)
         y = net(x)
     '''
-    def __init__(self, out_channels, kernel_size, stride=1,
-                 padding=0, dilation=1, groups=1, bias=True):
+    def __init__(self, out_channels: int, kernel_size: int or list, stride: int or list=1,
+                 padding: int=0, dilation: int=1, groups: int=1, bias: bool=True):
         kernel_size = _single(kernel_size)
         stride = _single(stride)
         padding = _single(padding)
