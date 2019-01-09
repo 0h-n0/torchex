@@ -26,10 +26,10 @@ class Linear(nn.Module):
         self.use_bias = use_bias
         
         self.initialize = True        
-        self.weight = None
-        self.bias = None
+        self.weight = nn.Parameter(None)
+        self.bias = nn.Parameter(None)
         self.to_args = None
-        self.to_kwargs = None        
+        self.to_kwargs = None
 
     def to(self, *args, **kwargs):
         self.to_args = args
@@ -39,12 +39,13 @@ class Linear(nn.Module):
     def forward(self, x):
         _, in_features = x.shape
         
-        if self.weight is None:
-            self.weight =  torch.Tensor(self.out_features, in_features)
+        #if self.weight.data is torch.Tensor():
+        if len(self.weight.data) == 0:            
+            self.weight.data =  torch.Tensor(self.out_features, in_features)
             stdv = 1. / math.sqrt(self.weight.size(1))
             self.weight.data.uniform_(-stdv, stdv)
             if self.use_bias:
-                self.bias = torch.Tensor(self.out_features)
+                self.bias.data = torch.Tensor(self.out_features)
                 self.bias.data.uniform_(-stdv, stdv)
 
             if self.to_args is not None:
