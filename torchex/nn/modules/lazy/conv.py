@@ -146,9 +146,8 @@ class Conv2d(_ConvNd):
             False, _pair(0), groups, bias)
 
     def forward(self, x):
-        in_channels = x.size(1)
-
         if self.weight is None:
+            in_channels = x.size(1)            
             self._initialize_weight(in_channels)            
 
         return F.conv2d(x, self.weight, self.bias, self.stride,
