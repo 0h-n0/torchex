@@ -24,8 +24,9 @@ class _ConvNd(LazyBase):
         self.groups = groups
         
         self.in_channels = None
-        self.weight = None
-        self.bias = bias
+        self.weight = nn.Parameter(None)
+        self.bias = nn.Parameter(None)
+        self.bias_flag = bias
 
     def _initialize_weight(self, in_channels):
         self.in_channels = in_channels
@@ -33,23 +34,22 @@ class _ConvNd(LazyBase):
             raise ValueError('in_channels must be divisible by groups')
 
         if self.transposed:
-            self.weight = torch.Tensor(self.in_channels, self.out_channels // self.groups, *self.kernel_size)
+            self.weight.data = torch.Tensor(self.in_channels,
+                                            self.out_channels // self.groups,
+                                            *self.kernel_size)
         else:
-            self.weight = torch.Tensor(self.out_channels, self.in_channels // self.groups, *self.kernel_size)
+            self.weight.data = torch.Tensor(self.out_channels,
+                                            self.in_channels // self.groups,
+                                            *self.kernel_size)
                 
-        if self.bias:
-            self.bias = torch.Tensor(self.out_channels)
+        if self.bias_flag:
+            self.bias.data = torch.Tensor(self.out_channels)
 
         if self.to_args is not None:
             self.weight = self.weight.to(*self.to_args, **self.to_kwargs)
             if self.bias is not None:
                 self.bias = self.bias.to(*self.to_args, **self.to_kwargs)
 
-        self.weight = nn.Parameter(self.weight)                    
-        if self.bias is None:
-            self.register_parameter('bias', None)
-        else:
-            self.bias = nn.Parameter(self.bias)                
         self._reset_parameters()
 
     def _reset_parameters(self):
@@ -114,7 +114,7 @@ class Conv1d(_ConvNd):
     def forward(self, x):
         in_channels = x.size(1)
 
-        if self.weight is None:
+        if len(self.weight) == 0:
             self._initialize_weight(in_channels)
             
         return F.conv1d(x, self.weight, self.bias, self.stride,
@@ -146,7 +146,7 @@ class Conv2d(_ConvNd):
             False, _pair(0), groups, bias)
 
     def forward(self, x):
-        if self.weight is None:
+        if len(self.weight) == 0:
             in_channels = x.size(1)            
             self._initialize_weight(in_channels)            
 
@@ -181,7 +181,7 @@ class Conv3d(_ConvNd):
     def forward(self, x):
         in_channels = x.size(1)
 
-        if self.weight is None:
+        if len(self.weight) == 0:
             self._initialize_weight(in_channels)                        
 
         return F.conv3d(x, self.weight, self.bias, self.stride,
