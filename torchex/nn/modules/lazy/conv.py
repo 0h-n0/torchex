@@ -45,10 +45,8 @@ class _ConvNd(LazyBase):
         if self.bias_flag:
             self.bias.data = torch.Tensor(self.out_channels)
 
-        if self.to_args is not None:
-            self.weight.data = self.weight.data.to(*self.to_args, **self.to_kwargs)
-            if self.bias is not None:
-                self.bias.data = self.bias.data.to(*self.to_args, **self.to_kwargs)
+        self.weight = self._to_device(self.weight)
+        self.bias = self._to_device(self.bias)            
 
         self._reset_parameters()
 
