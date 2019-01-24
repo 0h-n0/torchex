@@ -31,10 +31,7 @@ class Linear(LazyBase):
 
     def forward(self, x):
         _, in_features = x.shape
-        print(self.weight.data)        
         if len(self.weight.data) == 0:
-            print(self.weight.data)
-            print(self.to_args)
             self.weight.data =  torch.Tensor(self.out_features, in_features)
             stdv = 1. / math.sqrt(self.weight.size(1))
             self.weight.data.uniform_(-stdv, stdv)
