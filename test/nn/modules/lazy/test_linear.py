@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 import torch
 import torch.nn as nn
@@ -70,5 +72,48 @@ def test_cuda_linear_with_class_definition():
     net = MyLinear().cuda()
     y = net(x)
     assert list(y.shape) == [10, 3]
+    
+def test_load_model(tmpdir):
+    class MyLinear(nn.Module):
+        def __init__(self):
+            super(MyLinear, self).__init__()
+            self.linear = exnn.Linear(3)
+        def forward(self, x):
+            return self.linear(x)
+
+    path = Path(tmpdir) / 'model.pth'
+    
+    x = torch.randn(10, 20)
+    net = MyLinear()
+    net(x)
+    torch.save(net.state_dict(), path)
+
+    net2 = MyLinear()
+    net2.load_state_dict(torch.load(path))
+    y = net2(x)
+    assert list(y.shape) == [10, 3]
+
+def test_load_sequential_model(tmpdir):
+    class MyLinear(nn.Module):
+        def __init__(self):
+            super(MyLinear, self).__init__()
+            self.linear = nn.Sequential(
+                exnn.Linear(3)
+                )
+        def forward(self, x):
+            return self.linear(x)
+
+    path = Path(tmpdir) / 'model2.pth'
+    
+    x = torch.randn(10, 20)
+    net = MyLinear()
+    net(x)
+    torch.save(net.state_dict(), path)
+
+    net2 = MyLinear()
+    net2.load_state_dict(torch.load(path))
+    y = net2(x)
+    assert list(y.shape) == [10, 3]
+    
     
     

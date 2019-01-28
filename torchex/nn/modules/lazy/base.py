@@ -8,6 +8,7 @@ class LazyBase(nn.Module):
         self.to_args = None
         self.to_kwargs = None
         self._fn = []
+        self._register_load_state_dict_pre_hook(self._state_dict_hook)        
 
     def to(self, *args, **kwargs):
         self.to_args = args
@@ -19,6 +20,16 @@ class LazyBase(nn.Module):
         super()._apply(fn)
         return self
 
+    def _state_dict_hook(self, state_dict, prefix, local_metadata, strict,
+                         missing_keys, unexpected_keys, error_msgs):
+        for name, data in state_dict.items():
+            if 'weight' in name:
+                self.weight.data = data
+            elif 'bias' in name:
+                self.bias.data = data
+            else:
+                raise ValueError(name)
+    
     def _to_device(self, param):
         if param is None:
             return None

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 import torch
 import torch.nn as nn
@@ -121,4 +123,20 @@ def test_cuda_conv3d_with_cls():
     y = net(x)    
     assert list(y.shape) == [10, 3, 27, 27, 27]    
 
-    
+def test_load_conv_model(tmpdir):
+    class MyConv(nn.Module):
+        def __init__(self):
+            super(MyConv, self).__init__()
+            self.conv = exnn.Conv1d(3, 2)            
+        def forward(self, x):
+            return self.conv(x)
+
+    path = Path(tmpdir) / 'model.pth'
+    x = torch.randn(10, 10, 20)
+    net = MyConv()
+    y = net(x)
+    torch.save(net.state_dict(), path)
+
+    net2 = MyConv()
+    net2.load_state_dict(torch.load(path))
+    assert list(y.shape) == [10, 3, 19]

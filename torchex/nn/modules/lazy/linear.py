@@ -29,6 +29,7 @@ class Linear(LazyBase):
         self.weight = nn.Parameter(None)
         self.bias = nn.Parameter(None)
 
+
     def forward(self, x):
         _, in_features = x.shape
         if len(self.weight.data) == 0:
@@ -44,6 +45,11 @@ class Linear(LazyBase):
             self.bias = self._to_device(self.bias)            
             
         return F.linear(x, self.weight, self.bias)
+    
+    def extra_repr(self):
+        return 'in_features={}, out_features={}, bias={}'.format(
+            self.in_features, self.out_features, self.bias is not None
+        )    
     
 if __name__ == "__main__":
     x = torch.randn(10, 2).to('cuda')

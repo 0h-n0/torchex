@@ -31,7 +31,7 @@ test_require = [
 setuptools.setup(
     name="torchex",
     version=version,
-    python_requires='>3.6',    
+    python_requires='>3.5',    
     author="Koji Ono",
     author_email="koji.ono@exwzd.com",
     description="Pytorch Extension Module.",
