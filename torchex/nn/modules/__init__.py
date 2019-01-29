@@ -9,7 +9,7 @@ from .cropping import (Crop2d,
 
 from .local import Conv2dLocal
 
-from .util import Flatten
+from .util import Flatten, Pass
 
 from .conv import (MLPConv2d,
                    UpsampleConvLayer)
