@@ -27,6 +27,7 @@ class _ConvNd(LazyBase):
         self.weight = nn.Parameter(None)
         self.bias = nn.Parameter(None)
         self.bias_flag = bias
+        self._register_load_state_dict_pre_hook(self._lazy_load_state_dict_hook)        
 
     def _initialize_weight(self, in_channels):
         self.in_channels = in_channels
@@ -47,7 +48,6 @@ class _ConvNd(LazyBase):
 
         self.weight = self._to_device(self.weight)
         self.bias = self._to_device(self.bias)            
-
         self._reset_parameters()
 
     def _reset_parameters(self):
@@ -56,7 +56,19 @@ class _ConvNd(LazyBase):
         if self.bias is not None:
             fan_in, _ = init._calculate_fan_in_and_fan_out(self.weight)
             bound = 1 / math.sqrt(fan_in)
-            init.uniform_(self.bias, -bound, bound)        
+            init.uniform_(self.bias, -bound, bound)
+
+    def _lazy_load_state_dict_hook(self, state_dict, prefix, local_metadata, strict,
+                                   missing_keys, unexpected_keys, error_msgs):
+        for name, data in state_dict.items():
+            if prefix in name:
+                if 'weight' in name:
+                    self.in_channels = data.shape[0]
+                    self.weight.data = data
+                elif 'bias' in name:
+                    self.bias.data = data
+                else:
+                    raise ValueError(name)
             
     def extra_repr(self):
         s = ('{in_channels}, {out_channels}, kernel_size={kernel_size}'

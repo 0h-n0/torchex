@@ -114,6 +114,31 @@ def test_load_sequential_model(tmpdir):
     net2.load_state_dict(torch.load(path))
     y = net2(x)
     assert list(y.shape) == [10, 3]
+
+def test_load_sequential_2_layer_model(tmpdir):
+
+    class MyLinear(nn.Module):
+        def __init__(self):
+            super(MyLinear, self).__init__()
+            self.linear = nn.Sequential(
+                nn.Linear(20, 10),
+                exnn.Linear(3)
+                )
+        def forward(self, x):
+            return self.linear(x)
+
+    path = Path(tmpdir) / 'model3.pth'
+    x = torch.randn(10, 20)
+    net = MyLinear()
+
+    net(x)
+    torch.save(net.state_dict(), path)
+
+    net2 = MyLinear()
+    net2.load_state_dict(torch.load(path))
+    y = net2(x)
+
+    assert list(y.shape) == [10, 3]
     
     
     

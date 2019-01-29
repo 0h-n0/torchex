@@ -22,18 +22,31 @@ class Linear(LazyBase):
     '''
     def __init__(self, out_features, use_bias=True):
         super(Linear, self).__init__()
+        self.in_features = None
         self.out_features = out_features
         self.use_bias = use_bias
         
         self.initialize = True        
         self.weight = nn.Parameter(None)
         self.bias = nn.Parameter(None)
+        self._register_load_state_dict_pre_hook(self._lazy_load_state_dict_hook)
 
+    def _lazy_load_state_dict_hook(self, state_dict, prefix, local_metadata, strict,
+                                   missing_keys, unexpected_keys, error_msgs):
+        for name, data in state_dict.items():
+            if prefix in name:
+                if 'weight' in name:
+                    self.in_features = data.shape[-1]
+                    self.weight.data = data
+                elif 'bias' in name:
+                    self.bias.data = data
+                else:
+                    raise ValueError(name)
 
     def forward(self, x):
-        _, in_features = x.shape
         if len(self.weight.data) == 0:
-            self.weight.data =  torch.Tensor(self.out_features, in_features)
+            self.in_features = x.shape[-1]
+            self.weight.data =  torch.Tensor(self.out_features, self.in_features)
             stdv = 1. / math.sqrt(self.weight.size(1))
             self.weight.data.uniform_(-stdv, stdv)
             
