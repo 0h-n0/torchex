@@ -45,4 +45,17 @@ x = troch.randn(10, 100)
 y = net(x)
 ```
 
+### torchex.nn list
+
+* `torchex.nn.Pass`
+* `torchex.nn.Flatten`
+* `torchex.nn.Linear`
+  * Lazy style
+* `torchex.nn.Conv1d`
+  * Lazy style
+* `torchex.nn.Conv2d`
+  * Lazy style
+* `torchex.nn.Conv3d`
+  * Lazy style
+* `torchex.nn.Conv2dLocal`
 
