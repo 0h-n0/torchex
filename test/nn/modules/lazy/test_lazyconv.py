@@ -174,13 +174,15 @@ def test_load_conv2d_model(tmpdir):
             return self.conv(x)
 
     path = Path(tmpdir) / 'model.pth'
-    x = torch.randn(10, 10, 20)
+    x = torch.randn(10, 20, 28, 28)
     net = MyConv()
     y = net(x)
     torch.save(net.state_dict(), path)
-
+    assert list(y.shape) == [10, 3, 27, 27]
+    
     net2 = MyConv()
     net2.load_state_dict(torch.load(path))
+    y = net2(x)
     assert list(y.shape) == [10, 3, 27, 27]    
 
 def test_load_many_conv2d_layers_model(tmpdir):
@@ -197,12 +199,54 @@ def test_load_many_conv2d_layers_model(tmpdir):
             return self.conv(x)
 
     path = Path(tmpdir) / 'model.pth'
-    x = torch.randn(10, 10, 20)
+    x = torch.randn(10, 20, 28, 28)    
     net = MyConv()
     y = net(x)
     torch.save(net.state_dict(), path)
 
     net2 = MyConv()
     net2.load_state_dict(torch.load(path))
-    assert list(y.shape) == [10, 540]
+    assert list(y.shape) == [10, 20280]
+
+def test_load_conv3d_model(tmpdir):
+    class MyConv(nn.Module):
+        def __init__(self):
+            super(MyConv, self).__init__()
+            self.conv = exnn.Conv3d(3, 2)            
+        def forward(self, x):
+            return self.conv(x)
+
+    path = Path(tmpdir) / 'model.pth'
+    x = torch.randn(10, 20, 28, 28, 28)
+    net = MyConv()
+    y = net(x)
+    torch.save(net.state_dict(), path)
+
+    net2 = MyConv()
+    net2.load_state_dict(torch.load(path))
+    assert list(y.shape) == [10, 3, 27, 27, 27]    
+
+def test_load_many_conv3d_layers_model(tmpdir):
+    class MyConv(nn.Module):
+        def __init__(self):
+            super(MyConv, self).__init__()
+            self.conv = nn.Sequential(
+                exnn.Conv3d(20, 30, 5, 5),
+                exnn.Conv3d(30, 60, 5, 5),
+                exnn.Flatten(),
+                )
+                
+        def forward(self, x):
+            return self.conv(x)
+
+    path = Path(tmpdir) / 'model.pth'
+    x = torch.randn(10, 20, 28, 28, 28)    
+    net = MyConv()
+    y = net(x)
+    torch.save(net.state_dict(), path)
+
+    net2 = MyConv()
+    net2.load_state_dict(torch.load(path))
+
+    assert list(y.shape) == [10, 60]
     

@@ -20,10 +20,13 @@ class Linear(LazyBase):
         y = net(x)
 
     '''
-    def __init__(self, out_features, use_bias=True):
+    def __init__(self, in_features, out_features=None, use_bias=True):
         super(Linear, self).__init__()
-        self.in_features = None
-        self.out_features = out_features
+        if out_features is None:
+            self.in_features, self.out_features = None, in_features
+        else:
+            self.in_features = in_features            
+            self.out_features = out_features
         self.use_bias = use_bias
         
         self.initialize = True        

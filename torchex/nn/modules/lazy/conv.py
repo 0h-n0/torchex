@@ -9,27 +9,30 @@ from .utils import _single, _pair, _triple
 from .base import LazyBase
 
 class _ConvNd(LazyBase):
-    def __init__(self, out_channels, kernel_size, stride,
+    def __init__(self, in_channels, out_channels, kernel_size, stride,
                  padding, dilation, transposed, output_padding, groups, bias):
         super(_ConvNd, self).__init__()
         if out_channels % groups != 0:
             raise ValueError('out_channels must be divisible by groups')
+
+        self.in_channels = in_channels                    
         self.out_channels = out_channels
         self.kernel_size = kernel_size
+
         self.stride = stride
         self.padding = padding
         self.dilation = dilation
         self.transposed = transposed
         self.output_padding = output_padding
         self.groups = groups
-        
-        self.in_channels = None
+
         self.weight = nn.Parameter(None)
         self.bias = nn.Parameter(None)
         self.bias_flag = bias
         self._register_load_state_dict_pre_hook(self._lazy_load_state_dict_hook)        
 
     def _initialize_weight(self, in_channels):
+
         self.in_channels = in_channels
         if self.in_channels % self.groups != 0:
             raise ValueError('in_channels must be divisible by groups')
@@ -111,20 +114,29 @@ class Conv1d(_ConvNd):
         x = troch.randn(10, 3, 28)
         y = net(x)
     '''
-    def __init__(self, out_channels: int, kernel_size: int or list, stride: int or list=1,
+    def __init__(self, in_channels: int, out_channels: int,
+                 kernel_size: int or list=None, stride: int or list=1,
                  padding: int=0, dilation: int=1, groups: int=1, bias: bool=True):
+        if kernel_size is None:
+            kernel_size = out_channels            
+            out_channels = in_channels
+            in_channels =  None
+        else:
+            in_channels = in_channels                    
+            out_channels = out_channels
+            kernel_size = kernel_size
+        
         kernel_size = _single(kernel_size)
         stride = _single(stride)
         padding = _single(padding)
         dilation = _single(dilation)
         super(Conv1d, self).__init__(
-            out_channels, kernel_size, stride, padding, dilation,
+            in_channels, out_channels, kernel_size, stride, padding, dilation,
             False, _single(0), groups, bias)
     
     def forward(self, x):
-        in_channels = x.size(1)
-
         if len(self.weight) == 0:
+            in_channels = x.size(1)            
             self._initialize_weight(in_channels)
             
         return F.conv1d(x, self.weight, self.bias, self.stride,
@@ -145,14 +157,24 @@ class Conv2d(_ConvNd):
         x = troch.randn(10, 3, 28, 28)
         y = net(x)
     '''
-    def __init__(self, out_channels, kernel_size, stride=1,
-                 padding=0, dilation=1, groups=1, bias=True):
+    def __init__(self, in_channels: int, out_channels: int,
+                 kernel_size: int or list=None, stride: int or list=1,
+                 padding: int=0, dilation: int=1, groups: int=1, bias: bool=True):
+        if kernel_size is None:
+            kernel_size = out_channels            
+            out_channels = in_channels
+            in_channels =  None
+        else:
+            in_channels = in_channels                    
+            out_channels = out_channels
+            kernel_size = kernel_size
+        
         kernel_size = _pair(kernel_size)
         stride = _pair(stride)
         padding = _pair(padding)
         dilation = _pair(dilation)
         super(Conv2d, self).__init__(
-            out_channels, kernel_size, stride, padding, dilation,
+            in_channels, out_channels, kernel_size, stride, padding, dilation,
             False, _pair(0), groups, bias)
 
     def forward(self, x):
@@ -162,7 +184,6 @@ class Conv2d(_ConvNd):
 
         return F.conv2d(x, self.weight, self.bias, self.stride,
                       self.padding, self.dilation, self.groups)
-
 
 class Conv3d(_ConvNd):
     '''
@@ -178,20 +199,30 @@ class Conv3d(_ConvNd):
         x = troch.randn(10, 3, 100, 28, 28)
         y = net(x)
     '''
-    def __init__(self, out_channels, kernel_size, stride=1,
-                 padding=0, dilation=1, groups=1, bias=True):
+    def __init__(self, in_channels: int, out_channels: int,
+                 kernel_size: int or list=None, stride: int or list=1,
+                 padding: int=0, dilation: int=1, groups: int=1, bias: bool=True):
+        
+        if kernel_size is None:
+            kernel_size = out_channels            
+            out_channels = in_channels
+            in_channels =  None
+        else:
+            in_channels = in_channels                    
+            out_channels = out_channels
+            kernel_size = kernel_size
+        
         kernel_size = _triple(kernel_size)
         stride = _triple(stride)
         padding = _triple(padding)
         dilation = _triple(dilation)
         super(Conv3d, self).__init__(
-            out_channels, kernel_size, stride, padding, dilation,
+            in_channels, out_channels, kernel_size, stride, padding, dilation,
             False, _triple(0), groups, bias)
     
     def forward(self, x):
-        in_channels = x.size(1)
-
         if len(self.weight) == 0:
+            in_channels = x.size(1)            
             self._initialize_weight(in_channels)                        
 
         return F.conv3d(x, self.weight, self.bias, self.stride,
