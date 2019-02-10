@@ -7,6 +7,7 @@ import torch.nn.functional as F
 
 from .utils import _single, _pair, _triple
 from .base import LazyBase
+from ...init import feedforward_init
 
 class _ConvNd(LazyBase):
     def __init__(self, in_channels, out_channels, kernel_size, stride,
@@ -31,7 +32,7 @@ class _ConvNd(LazyBase):
         self.bias_flag = bias
         self._register_load_state_dict_pre_hook(self._lazy_load_state_dict_hook)        
 
-    def _initialize_weight(self, in_channels):
+    def _initialize_weight(self, in_channels, xavier_init: bool):
 
         self.in_channels = in_channels
         if self.in_channels % self.groups != 0:
@@ -52,6 +53,9 @@ class _ConvNd(LazyBase):
         self.weight = self._to_device(self.weight)
         self.bias = self._to_device(self.bias)            
         self._reset_parameters()
+        
+        if xavier_init:
+            feedforward_init(self)        
 
     def _reset_parameters(self):
         n = self.in_channels
@@ -116,7 +120,8 @@ class Conv1d(_ConvNd):
     '''
     def __init__(self, in_channels: int, out_channels: int,
                  kernel_size: int or list=None, stride: int or list=1,
-                 padding: int=0, dilation: int=1, groups: int=1, bias: bool=True):
+                 padding: int=0, dilation: int=1, groups: int=1,
+                 bias: bool=True, xavier_init: bool=True):
         if kernel_size is None:
             kernel_size = out_channels            
             out_channels = in_channels
@@ -130,6 +135,7 @@ class Conv1d(_ConvNd):
         stride = _single(stride)
         padding = _single(padding)
         dilation = _single(dilation)
+        self.xavier_init = xavier_init        
         super(Conv1d, self).__init__(
             in_channels, out_channels, kernel_size, stride, padding, dilation,
             False, _single(0), groups, bias)
@@ -137,7 +143,7 @@ class Conv1d(_ConvNd):
     def forward(self, x):
         if len(self.weight) == 0:
             in_channels = x.size(1)            
-            self._initialize_weight(in_channels)
+            self._initialize_weight(in_channels, self.xavier_init)
             
         return F.conv1d(x, self.weight, self.bias, self.stride,
                       self.padding, self.dilation, self.groups)
@@ -159,7 +165,8 @@ class Conv2d(_ConvNd):
     '''
     def __init__(self, in_channels: int, out_channels: int,
                  kernel_size: int or list=None, stride: int or list=1,
-                 padding: int=0, dilation: int=1, groups: int=1, bias: bool=True):
+                 padding: int=0, dilation: int=1, groups: int=1, 
+                 bias: bool=True, xavier_init: bool=True):        
         if kernel_size is None:
             kernel_size = out_channels            
             out_channels = in_channels
@@ -173,6 +180,8 @@ class Conv2d(_ConvNd):
         stride = _pair(stride)
         padding = _pair(padding)
         dilation = _pair(dilation)
+
+        self.xavier_init = xavier_init
         super(Conv2d, self).__init__(
             in_channels, out_channels, kernel_size, stride, padding, dilation,
             False, _pair(0), groups, bias)
@@ -180,7 +189,7 @@ class Conv2d(_ConvNd):
     def forward(self, x):
         if len(self.weight) == 0:
             in_channels = x.size(1)            
-            self._initialize_weight(in_channels)            
+            self._initialize_weight(in_channels, self.xavier_init)            
 
         return F.conv2d(x, self.weight, self.bias, self.stride,
                       self.padding, self.dilation, self.groups)
@@ -201,8 +210,8 @@ class Conv3d(_ConvNd):
     '''
     def __init__(self, in_channels: int, out_channels: int,
                  kernel_size: int or list=None, stride: int or list=1,
-                 padding: int=0, dilation: int=1, groups: int=1, bias: bool=True):
-        
+                 padding: int=0, dilation: int=1, groups: int=1,
+                 bias: bool=True, xavier_init: bool=True):        
         if kernel_size is None:
             kernel_size = out_channels            
             out_channels = in_channels
@@ -216,6 +225,7 @@ class Conv3d(_ConvNd):
         stride = _triple(stride)
         padding = _triple(padding)
         dilation = _triple(dilation)
+        self.xavier_init = xavier_init        
         super(Conv3d, self).__init__(
             in_channels, out_channels, kernel_size, stride, padding, dilation,
             False, _triple(0), groups, bias)
@@ -223,7 +233,7 @@ class Conv3d(_ConvNd):
     def forward(self, x):
         if len(self.weight) == 0:
             in_channels = x.size(1)            
-            self._initialize_weight(in_channels)                        
+            self._initialize_weight(in_channels, self.xavier_init)                        
 
         return F.conv3d(x, self.weight, self.bias, self.stride,
                       self.padding, self.dilation, self.groups)

@@ -10,4 +10,3 @@ def test_transform_random_resize():
     t = T.RandomResize(10, 30)
     assert t(pil_img).size == (12, 28)
 
-    

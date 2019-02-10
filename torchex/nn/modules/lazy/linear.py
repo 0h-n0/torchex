@@ -4,6 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from .base import LazyBase
+from ...init import feedforward_init
 
 class Linear(LazyBase):
     '''
@@ -20,7 +21,7 @@ class Linear(LazyBase):
         y = net(x)
 
     '''
-    def __init__(self, in_features, out_features=None, use_bias=True):
+    def __init__(self, in_features, out_features=None, use_bias=True, xavier_init=True):
         super(Linear, self).__init__()
         if out_features is None:
             self.in_features, self.out_features = None, in_features
@@ -28,8 +29,8 @@ class Linear(LazyBase):
             self.in_features = in_features            
             self.out_features = out_features
         self.use_bias = use_bias
-        
-        self.initialize = True        
+        self.xavier_init = xavier_init
+
         self.weight = nn.Parameter(None)
         self.bias = nn.Parameter(None)
         self._register_load_state_dict_pre_hook(self._lazy_load_state_dict_hook)
@@ -58,7 +59,9 @@ class Linear(LazyBase):
                 self.bias.data.uniform_(-stdv, stdv)
 
             self.weight = self._to_device(self.weight)
-            self.bias = self._to_device(self.bias)            
+            self.bias = self._to_device(self.bias)
+            if self.xavier_init:
+                feedforward_init(self)        
             
         return F.linear(x, self.weight, self.bias)
     
