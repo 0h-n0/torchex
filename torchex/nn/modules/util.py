@@ -18,7 +18,7 @@ _quadruple = _ntuple(4)
 
 class Flatten(nn.Module):
     def forward(self, input):
-        return input.view(input.size(0), -1)
+        return input.contiguous().view(input.size(0), -1)
 
 class Pass(nn.Module):
     ''' Nothint to do.
