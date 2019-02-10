@@ -34,12 +34,13 @@ def _is_numpy_image(img):
     return isinstance(img, np.ndarray) and (img.ndim in {2, 3})
 
 
-def random_resize(img, min_size, max_size, interpolation=Image.BILINEAR):
+def random_resize(img, min_size, max_size, equal_aspect, interpolation=Image.BILINEAR):
     r"""Resize the input PIL Image to the given size.
     Args:
         img (PIL Image): Image to be resized.
-        min_sizes (sequence[w, h] or int): Desired output minimum size. 
-        max_sizes (sequence[w, h] or int): Desired output maximum size. 
+        min_sizes (sequence[h, w] or int): Desired output minimum size. 
+        max_sizes (sequence[h, w] or int): Desired output maximum size. 
+        equal_aspect (bool, optional) : 
     Returns:
         PIL Image: Resized image.
     """
@@ -62,6 +63,8 @@ def random_resize(img, min_size, max_size, interpolation=Image.BILINEAR):
         else:
             sample = np.random.choice(range(min_size[i], max_size[i]))
         size.append(sample)
-    # size[w, h]
+
+    if equal_aspect:
+        size[1] = size[0]
     
     return img.resize(size[::-1], interpolation)
