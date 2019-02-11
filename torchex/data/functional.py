@@ -62,9 +62,9 @@ def pad_random_sift(img, canvas_size, fill=0):
     _x = np.random.choice(origin_range[0])
     _y = np.random.choice(origin_range[1])
     
-    pad_top = _y - 1
+    pad_top = _y
     pad_bottom = canvas_size[1] - (H + pad_top)
-    pad_left = _x - 1
+    pad_left = _x
     pad_right = canvas_size[0] - (W + pad_left)
     
     if img.mode == 'P':
