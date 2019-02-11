@@ -58,4 +58,39 @@ y = net(x)
 * `torchex.nn.Conv3d`
   * Lazy style
 * `torchex.nn.Conv2dLocal`
+* `torchex.nn.GlobalAvgPool1d`
+* `torchex.nn.GlobalAvgPool2d`
+* `torchex.nn.GlobalMaxPool1d`
+* `torchex.nn.GlobalMaxPool2d`
+* `torchex.nn.MaxAvgPool2d`
+* `torch.nn.Crop2d`
+* `torch.nn.Crop3d`
+* `torch.nn.MLPConv2d`
+* `torch.nn.UpsampleConvLayer`
+* `torch.nn.CordConv2d`
+* `torch.nn.DFT1d`
+* `torch.nn.DFT2d`
+* `torch.nn.PeriodicPad2d`
+* `torch.nn.PeriodicPad3d`
+* `torch.nn.Highway`
+* `torch.nn.Inception`
+* `torch.nn.InceptionBN`
+* `torch.nn.IndRNNCell`
+* `torch.nn.IndRNNTanhCell`
+* `torch.nn.IndRNNReLuCell`
+* `torch.nn.IndRNN`
+* `torch.nn.GraphLinear`
+* `torch.nn.GraphConv`
+* `torch.nn.SparseMM`
+* `torch.nn.GraphBatchNrom`
 
+### torchex.data.transforms
+
+* `torchex.data.transforms.PadRandomSift`
+* `torchex.data.transforms.RandomResize`
+
+### torchex.data.attribute
+
+for visualization
+
+* `torchex.attribute.IntegratedGradients`
