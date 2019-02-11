@@ -2,6 +2,33 @@ from PIL import Image
 
 from . import functional as F
 
+
+class Sift(object):
+    pass
+
+class RandomSift(object):
+    pass
+
+class PadRandomSift(object):
+    r""" Pad and randomly sift input PIL Image to the given size.
+    
+    """
+    def __init__(self, canvas_size, fill=0):
+        self.canvas_size = canvas_size
+        self.fill = fill
+
+    def __call__(self, img):
+        """
+        Args:
+            img (PIL Image): Image to be scaled.
+        Returns:
+            PIL Image: Rescaled image.
+        """
+        return F.pad_random_sift(img, self.canvas_size, self.fill)
+
+    def __repr__(self):
+        return self.__class__.__name__ + '(canvas_size={0}, fill={1})'.format(self.canvas_size, self.fill)
+
 class RandomResize(object):
     """Resize the input PIL Image to the given size.
     Args:
@@ -25,7 +52,7 @@ class RandomResize(object):
         
         self.min_size = min_size
         self.max_size = max_size
-        self.equal_aspcet = equal_aspect
+        self.equal_aspect = equal_aspect
         self.interpolation = interpolation
 
     def __call__(self, img):

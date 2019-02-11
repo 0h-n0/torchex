@@ -25,16 +25,67 @@ def _is_pil_image(img):
     else:
         return isinstance(img, Image.Image)
 
-
 def _is_tensor_image(img):
     return torch.is_tensor(img) and img.ndimension() == 3
-
 
 def _is_numpy_image(img):
     return isinstance(img, np.ndarray) and (img.ndim in {2, 3})
 
 
-def random_resize(img, min_size, max_size, equal_aspect, interpolation=Image.BILINEAR):
+def sift():
+    pass
+
+def random_sift():
+    pass
+
+def pad_random_sift(img, canvas_size, fill=0):
+    r"""Pad and randomly sift PIL Image to the given canvas size.
+    Args:
+        img (PIL Image): Image to be resized.
+        canvas_sizes (sequence[h, w] or int): Desired output minimum size. 
+    Returns:
+        PIL Image: Resized image.
+    """
+    if not _is_pil_image(img):
+        raise TypeError('img should be PIL Image. Got {}'.format(type(img)))
+    if not (isinstance(canvas_size, int) or (isinstance(canvas_size, Iterable) and len(canvas_size) == 2)):
+        raise TypeError('Got inappropriate canvas_size arg: {}'.format(canvas_size))
+    canvas_size = [canvas_size, canvas_size] if isinstance(canvas_size, int) else canvas_size
+    W, H = img.size
+    
+    if canvas_size[0] <= W or canvas_size[1] <= H:
+        raise ValueError('canvas_size is higher than input image size: {}'.format(canvas_size))
+    
+    # left top point
+    origin_range = [canvas_size[0] - W, canvas_size[1] - H]
+
+    _x = np.random.choice(origin_range[0])
+    _y = np.random.choice(origin_range[1])
+    
+    pad_top = _y - 1
+    pad_bottom = canvas_size[1] - (H + pad_top)
+    pad_left = _x - 1
+    pad_right = canvas_size[0] - (W + pad_left)
+    
+    if img.mode == 'P':
+        palette = img.getpalette()
+        img = np.asarray(img)
+        img = np.pad(img, ((pad_top, pad_bottom), (pad_left, pad_right)), 'constant')
+        img = Image.fromarray(img)
+        img.putpalette(palette)
+        return img
+        
+    img = np.asarray(img)
+    # RGB image
+    if len(img.shape) == 3:
+        img = np.pad(img, ((pad_top, pad_bottom), (pad_left, pad_right), (0, 0)), 'constant')
+        # Grayscale image
+    if len(img.shape) == 2:
+        img = np.pad(img, ((pad_top, pad_bottom), (pad_left, pad_right)), 'constant')
+    return Image.fromarray(img)
+
+    
+def random_resize(img, min_size, max_size, equal_aspect=False, interpolation=Image.BILINEAR):
     r"""Resize the input PIL Image to the given size.
     Args:
         img (PIL Image): Image to be resized.
