@@ -33,14 +33,14 @@ class SequenceLinear(nn.Module):
         self.nonlinearity = nonlinearity
         if not init_gain:
             init_gain = nn.init.calculate_gain(nonlinearity)
-        
+
         feedforward_init(self.linear,
                          init_mean,
                          init_std,
                          init_xavier,
                          init_normal,
                          init_gain)
-        
+
     def forward(self, x: Tensor):
         assert len(x.size()) == 3, x.size()
         if self.batch_first:
@@ -52,9 +52,9 @@ class SequenceLinear(nn.Module):
         x = x.view(T*B, F)
         x = self.linear(x)
         x = getattr(TF, self.nonlinearity)(x)
-        
+
         if self.batch_first:
-            x = x.view(T, B, self.out_features)            
+            x = x.view(T, B, self.out_features)
             x = torch.transpose(x, 0, 1)
         else:
             x = x.view(T, B, self.out_features)
@@ -75,20 +75,20 @@ class LSTM(nn.Module):
                  init_normal: bool=True,
                  init_gain: float=1.0,
                  concat: bool=True,
-                 init_mean=0,                 
+                 init_mean=0,
                  init_std=0.1,
-                 init_lower=0,                 
+                 init_lower=0,
                  init_upper=0.04,
                  concat_between_layers=False,
                  ):
-        super(LSTMModel, self).__init__()
+        super(LSTM, self).__init__()
         self.in_size = input_size
         self.hidden_size = hidden_size
         self.num_layers = num_layers
         self.bidirectional = bidirectional
         self.concat = concat
         self.concat_between_layers = concat_between_layers
-        
+
         if concat_between_layers and bidirectional:
             _rnn = []
             _rnn.append(nn.LSTM(input_size, hidden_size, num_layers=1,
@@ -105,7 +105,7 @@ class LSTM(nn.Module):
                          init_gain=init_gain,
                          init_mean=init_mean,
                          init_std=init_std)
-                
+
             self.rnn = nn.ModuleList(_rnn)
         else:
             self.rnn =\
@@ -119,29 +119,29 @@ class LSTM(nn.Module):
                      init_gain=init_gain,
                      init_mean=init_mean,
                      init_std=init_std)
-            
+
 
     def forward(self,
                 x: Union[Tensor, PackedSequence],
                 hx: Union[Tensor, Tuple[Tensor, ...]]=None) ->\
                 Tuple[Tensor, Tensor]:
-        
+
         assert isinstance(x, Tensor) or\
             isinstance(x, PackedSequence), type(x)
 
         if self.concat_between_layers and self.bidirectional:
             output = x
             for idx, _rnn in enumerate(self.rnn):
-                _rnn.flatten_parameters()                
+                _rnn.flatten_parameters()
                 output, hx = _rnn(output)
-                _rnn.flatten_parameters()                
+                _rnn.flatten_parameters()
         else:
             self.rnn.flatten_parameters()
             output, hx = self.rnn(x, hx)
-            self.rnn.flatten_parameters()            
-        
+            self.rnn.flatten_parameters()
+
         if (not self.concat) and self.bidirectional:
             B, T, F = output.size()
             output = output[:, :, :F//2] + output[:, :, F//2:]
-            
+
         return output, hx
