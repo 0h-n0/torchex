@@ -122,7 +122,7 @@ class Conv1d(_ConvNd):
                  kernel_size: int or list=None, stride: int or list=1,
                  padding: int=0, dilation: int=1, groups: int=1,
                  bias: bool=True, xavier_init: bool=True):
-        assert in_channels is None and out_channels is None,
+        assert in_channels is None and out_channels is None, "Error"
         if kernel_size is None:
             kernel_size = out_channels
             out_channels = in_channels
