@@ -16,7 +16,7 @@ class _ConvNd(LazyBase):
         if out_channels % groups != 0:
             raise ValueError('out_channels must be divisible by groups')
 
-        self.in_channels = in_channels                    
+        self.in_channels = in_channels
         self.out_channels = out_channels
         self.kernel_size = kernel_size
 
@@ -30,7 +30,7 @@ class _ConvNd(LazyBase):
         self.weight = nn.Parameter(None)
         self.bias = nn.Parameter(None)
         self.bias_flag = bias
-        self._register_load_state_dict_pre_hook(self._lazy_load_state_dict_hook)        
+        self._register_load_state_dict_pre_hook(self._lazy_load_state_dict_hook)
 
     def _initialize_weight(self, in_channels, xavier_init: bool):
 
@@ -46,16 +46,16 @@ class _ConvNd(LazyBase):
             self.weight.data = torch.Tensor(self.out_channels,
                                             self.in_channels // self.groups,
                                             *self.kernel_size)
-                
+
         if self.bias_flag:
             self.bias.data = torch.Tensor(self.out_channels)
 
         self.weight = self._to_device(self.weight)
-        self.bias = self._to_device(self.bias)            
+        self.bias = self._to_device(self.bias)
         self._reset_parameters()
-        
+
         if xavier_init:
-            feedforward_init(self)        
+            feedforward_init(self)
 
     def _reset_parameters(self):
         n = self.in_channels
@@ -76,7 +76,7 @@ class _ConvNd(LazyBase):
                     self.bias.data = data
                 else:
                     raise ValueError(name)
-            
+
     def extra_repr(self):
         s = ('{in_channels}, {out_channels}, kernel_size={kernel_size}'
              ', stride={stride}')
@@ -101,81 +101,82 @@ class Conv1d(_ConvNd):
     :param padding: implicit zero padding to be added on both sides
     :param dilation: a parameter that controls the stride of elements in the window
     :param return_indices: if True, will return the max indices along with the outputs. Useful when Unpooling later
-    :param ceil_mode: when True, will use ceil instead of floor to compute the output shape    
+    :param ceil_mode: when True, will use ceil instead of floor to compute the output shape
 
     :type kernel_size: int or list
     :type stride: int or list
-    
+
     Examples::
 
         import torch
         import torchex.nn as exnn
-     
+
         net = exnn.Conv1d(10, 2)
         # You don't need to give the size of input for this module.
         # This network is equivalent to `nn.Conv1d(3, 10, 2)`.
-     
+
         x = troch.randn(10, 3, 28)
         y = net(x)
     '''
-    def __init__(self, in_channels: int, out_channels: int,
+    def __init__(self, in_channels: int = None, out_channels: int = None,
                  kernel_size: int or list=None, stride: int or list=1,
                  padding: int=0, dilation: int=1, groups: int=1,
                  bias: bool=True, xavier_init: bool=True):
+        assert in_channels is None and out_channels is None,
         if kernel_size is None:
-            kernel_size = out_channels            
+            kernel_size = out_channels
             out_channels = in_channels
             in_channels =  None
         else:
-            in_channels = in_channels                    
+            in_channels = in_channels
             out_channels = out_channels
             kernel_size = kernel_size
-        
+
         kernel_size = _single(kernel_size)
         stride = _single(stride)
         padding = _single(padding)
         dilation = _single(dilation)
-        self.xavier_init = xavier_init        
+        self.xavier_init = xavier_init
         super(Conv1d, self).__init__(
             in_channels, out_channels, kernel_size, stride, padding, dilation,
             False, _single(0), groups, bias)
-    
+
     def forward(self, x):
         if len(self.weight) == 0:
-            in_channels = x.size(1)            
+            in_channels = x.size(1)
             self._initialize_weight(in_channels, self.xavier_init)
-            
+
         return F.conv1d(x, self.weight, self.bias, self.stride,
                       self.padding, self.dilation, self.groups)
 
-    
+
 class Conv2d(_ConvNd):
     '''
     Examples::
 
         import torch
         import torchex.nn as exnn
-     
+
         net = exnn.Conv2d(10, 2)
         # You don't need to give the size of input for this module.
         # This network is equivalent to `nn.Conv2d(3, 10, 2)`.
-     
+
         x = troch.randn(10, 3, 28, 28)
         y = net(x)
     '''
-    def __init__(self, in_channels: int, out_channels: int,
+    def __init__(self, in_channels: int = None, out_channels: int = None,
                  kernel_size: int or list=None, stride: int or list=1,
-                 padding: int=0, dilation: int=1, groups: int=1, 
-                 bias: bool=True, xavier_init: bool=True):        
+                 padding: int=0, dilation: int=1, groups: int=1,
+                 bias: bool=True, xavier_init: bool=True):
         if kernel_size is None:
-            kernel_size = out_channels            
+            kernel_size = out_channels
             out_channels = in_channels
             in_channels =  None
         else:
-            in_channels = in_channels                    
+            in_channels = in_channels
             out_channels = out_channels
             kernel_size = kernel_size
-        
+
         kernel_size = _pair(kernel_size)
         stride = _pair(stride)
         padding = _pair(padding)
@@ -188,8 +189,8 @@ class Conv2d(_ConvNd):
 
     def forward(self, x):
         if len(self.weight) == 0:
-            in_channels = x.size(1)            
-            self._initialize_weight(in_channels, self.xavier_init)            
+            in_channels = x.size(1)
+            self._initialize_weight(in_channels, self.xavier_init)
 
         return F.conv2d(x, self.weight, self.bias, self.stride,
                       self.padding, self.dilation, self.groups)
@@ -200,41 +201,40 @@ class Conv3d(_ConvNd):
 
         import torch
         import torchex.nn as exnn
-     
+
         net = exnn.Conv3d(10, 2)
         # You don't need to give the size of input for this module.
         # This network is equivalent to `nn.Conv3d(3, 10, 2)`.
-     
+
         x = troch.randn(10, 3, 100, 28, 28)
         y = net(x)
     '''
-    def __init__(self, in_channels: int, out_channels: int,
+    def __init__(self, in_channels: int = None, out_channels: int = None,
                  kernel_size: int or list=None, stride: int or list=1,
                  padding: int=0, dilation: int=1, groups: int=1,
-                 bias: bool=True, xavier_init: bool=True):        
+                 bias: bool=True, xavier_init: bool=True):
         if kernel_size is None:
-            kernel_size = out_channels            
+            kernel_size = out_channels
             out_channels = in_channels
             in_channels =  None
         else:
-            in_channels = in_channels                    
+            in_channels = in_channels
             out_channels = out_channels
             kernel_size = kernel_size
-        
+
         kernel_size = _triple(kernel_size)
         stride = _triple(stride)
         padding = _triple(padding)
         dilation = _triple(dilation)
-        self.xavier_init = xavier_init        
+        self.xavier_init = xavier_init
         super(Conv3d, self).__init__(
             in_channels, out_channels, kernel_size, stride, padding, dilation,
             False, _triple(0), groups, bias)
-    
+
     def forward(self, x):
         if len(self.weight) == 0:
-            in_channels = x.size(1)            
-            self._initialize_weight(in_channels, self.xavier_init)                        
+            in_channels = x.size(1)
+            self._initialize_weight(in_channels, self.xavier_init)
 
         return F.conv3d(x, self.weight, self.bias, self.stride,
                       self.padding, self.dilation, self.groups)
-    
