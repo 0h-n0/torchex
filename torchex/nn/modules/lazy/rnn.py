@@ -8,7 +8,7 @@ from torch.nn.utils.rnn import PackedSequence
 
 from .base import LazyBase
 
-
+'''
 class LazyRNNBase(LazyBase):
     def __init__(self, mode, hidden_size,
                  num_layers=1, bias=True, batch_first=False,
@@ -41,7 +41,7 @@ class LazyRNNBase(LazyBase):
             self.gate_size = 3 * hidden_size
         else:
             self.gate_size = hidden_size
-            
+
         self._all_weights = []
         self._data_ptrs = None
 
@@ -97,8 +97,8 @@ class LazyRNNBase(LazyBase):
                     n = p.nelement()
                     p.data[n // 4:n // 2].fill_(1)  # forget bias
             else:
-                p.data.uniform_(-stdv, stdv)            
-            
+                p.data.uniform_(-stdv, stdv)
+
     def _initialize_weight(self, input_size):
         for layer in range(self.num_layers):
             for direction in range(self.num_directions):
@@ -118,7 +118,7 @@ class LazyRNNBase(LazyBase):
                 w_hh = nn.Parameter(w_hh)
                 b_ih = nn.Parameter(b_ih)
                 b_hh = nn.Parameter(b_hh)
-                
+
                 layer_params = (w_ih, w_hh, b_ih, b_hh)
 
                 suffix = '_reverse' if direction == 1 else ''
@@ -132,7 +132,7 @@ class LazyRNNBase(LazyBase):
                 self._all_weights.append(param_names)
 
         self.flatten_parameters()
-        self.reset_parameters()        
+        self.reset_parameters()
 
     def check_forward_args(self, input, hidden, batch_sizes):
         is_input_packed = batch_sizes is not None
@@ -173,7 +173,7 @@ class LazyRNNBase(LazyBase):
         if not self._all_weights:
             self.input_size = input.size(-1)
             self._initialize_weight(self.input_size)
-            
+
         if is_packed:
             input, batch_sizes = input
             max_batch_size = int(batch_sizes[0])
@@ -253,4 +253,4 @@ class LazyRNNBase(LazyBase):
     @property
     def all_weights(self):
         return [[getattr(self, weight) for weight in weights] for weights in self._all_weights]
-
+'''
