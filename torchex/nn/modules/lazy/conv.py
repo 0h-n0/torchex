@@ -123,7 +123,11 @@ class Conv1d(_ConvNd):
                  padding: int=0, dilation: int=1, groups: int=1,
                  bias: bool=True, xavier_init: bool=True):
         assert in_channels is None and out_channels is None, "Error"
-        if kernel_size is None:
+        if in_channels is None:
+            kernel_size = kernel_size
+            out_channels = out_channels
+            stride = stride
+        elif kernel_size is None:
             kernel_size = out_channels
             out_channels = in_channels
             in_channels =  None
@@ -168,7 +172,11 @@ class Conv2d(_ConvNd):
                  kernel_size: int or list=None, stride: int or list=1,
                  padding: int=0, dilation: int=1, groups: int=1,
                  bias: bool=True, xavier_init: bool=True):
-        if kernel_size is None:
+        if in_channels is None:
+            kernel_size = kernel_size
+            out_channels = out_channels
+            stride = stride
+        elif kernel_size is None:
             kernel_size = out_channels
             out_channels = in_channels
             in_channels =  None
@@ -213,7 +221,11 @@ class Conv3d(_ConvNd):
                  kernel_size: int or list=None, stride: int or list=1,
                  padding: int=0, dilation: int=1, groups: int=1,
                  bias: bool=True, xavier_init: bool=True):
-        if kernel_size is None:
+        if in_channels is None:
+            kernel_size = kernel_size
+            out_channels = out_channels
+            stride = stride
+        elif kernel_size is None:
             kernel_size = out_channels
             out_channels = in_channels
             in_channels =  None
