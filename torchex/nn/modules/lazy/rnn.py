@@ -8,7 +8,7 @@ from torch.nn.utils.rnn import PackedSequence
 
 from .base import LazyBase
 
-'''
+
 class LazyRNNBase(LazyBase):
     def __init__(self, mode, hidden_size,
                  num_layers=1, bias=True, batch_first=False,
@@ -253,4 +253,3 @@ class LazyRNNBase(LazyBase):
     @property
     def all_weights(self):
         return [[getattr(self, weight) for weight in weights] for weights in self._all_weights]
-'''
